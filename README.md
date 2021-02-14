@@ -8,3 +8,33 @@
 
 * [Scala 2.13.4](https://scala-lang.org)
 * [Akka 2.6.12](https://akka.io)
+
+## Реализация
+
+Главный метод `main` находится в объекте `Table`.
+
+Список классов и объектов:
+* `Table` - главный актор, порождающий вилки (`Fork`) и философов (`Person`). Каждому философу передаётся левая и правая вилка.
+* `Fork` - актор, реализующий вилку. Принимает команды `Take` и `Put`, отвечает `Taken` и `Busy`.
+* `Person` - актор, реализующий философа (или, как следует из названия, любого человека). Содержит ссылки на левую и правую вилки относительно него самого. Действия (думать и есть) симулируются через метод `Thread.sleep` на `3-10 секунд` (период каждый раз генерируется). Логика его действий такова, что сначала философ берёт левую вилку. Если она свободна, то собирается взять правую вилку, иначе начинает думать. Если правая вилка оказалась свободной, то он начинает есть, иначе освобождает левую вилку и начинает думать.
+
+## Запуск
+
+Требуется `sbt 1.4.7`.
+
+В папке с проектом запустить команду
+```
+sbt run
+```
+
+Пример вывода
+```
+...
+[2021-02-15 00:02:14,234] [INFO] [org.dedkot.Person] [akka://Table/user/Kakashi] - Kakashi eats use Fork4 and Fork5
+[2021-02-15 00:02:14,399] [INFO] [org.dedkot.Person] [akka://Table/user/Naruto] - Naruto eats use Fork1 and Fork2
+[2021-02-15 00:02:19,077] [INFO] [org.dedkot.Person] [akka://Table/user/Kakashi] - Kakashi end eats and put Fork4 and Fork5
+[2021-02-15 00:02:20,065] [INFO] [org.dedkot.Person] [akka://Table/user/Sakura] - Sakura eats use Fork3 and Fork4
+[2021-02-15 00:02:21,700] [INFO] [org.dedkot.Person] [akka://Table/user/Naruto] - Naruto end eats and put Fork1 and Fork2
+[2021-02-15 00:02:24,907] [INFO] [org.dedkot.Person] [akka://Table/user/Hinata] - Hinata eats use Fork5 and Fork1
+...
+```
