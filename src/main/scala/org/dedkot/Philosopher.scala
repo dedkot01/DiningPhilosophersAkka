@@ -8,8 +8,8 @@ import scala.util.Random
 
 class Philosopher(ctx: ActorContext[Command],
                   name: String,
-                  leftFork: ActorRef[Fork.Command],
-                  rightFork: ActorRef[Fork.Command]) {
+                  leftFork: ActorRef[Fork.Action],
+                  rightFork: ActorRef[Fork.Action]) {
 
   ctx.log.info("Hello, I'm {}", name)
 
@@ -80,8 +80,8 @@ object Philosopher {
   final case class ForkAnswer(msg: Fork.Answer) extends Command
 
   def apply(name: String,
-            leftFork: ActorRef[Fork.Command],
-            rightFork: ActorRef[Fork.Command]): Behavior[Command] = Behaviors.setup { ctx =>
+            leftFork: ActorRef[Fork.Action],
+            rightFork: ActorRef[Fork.Action]): Behavior[Command] = Behaviors.setup { ctx =>
     new Philosopher(ctx, name, leftFork, rightFork).thinks
   }
 

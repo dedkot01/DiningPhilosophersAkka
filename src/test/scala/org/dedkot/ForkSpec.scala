@@ -1,7 +1,7 @@
 package org.dedkot
 
 import akka.actor.testkit.typed.scaladsl.{ActorTestKit, ScalaTestWithActorTestKit}
-import org.dedkot.Fork.{Answer, Busy, Command, Put, Take, Taken}
+import org.dedkot.Fork.{Answer, Busy, Action, Put, Take, Taken}
 import org.scalatest.wordspec.AnyWordSpecLike
 
 class ForkSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
