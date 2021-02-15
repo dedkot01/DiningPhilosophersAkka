@@ -10,14 +10,14 @@ class Fork(private var takenBy: Option[String]) {
   private def free(): Behavior[Command] = Behaviors.receiveMessage {
     case Take(from) =>
       takenBy = Option(from.path.name)
-      from ! Taken()
+      from ! Taken
       busy
     case _ => Behaviors.same
   }
 
   private def busy(): Behavior[Command] = Behaviors.receiveMessage {
     case Take(from) =>
-      from ! Busy()
+      from ! Busy
       Behaviors.same
     case Put(from) =>
       if (takenBy.getOrElse(false).equals(from.path.name)) {
@@ -25,7 +25,7 @@ class Fork(private var takenBy: Option[String]) {
         free
       }
       else {
-        from ! Busy()
+        from ! Busy
         Behaviors.same
       }
     case _ => Behaviors.same
@@ -46,7 +46,7 @@ object Fork {
   case class Put(from: ActorRef[Answer]) extends Command
 
   sealed trait Answer
-  case class Taken() extends Answer
-  case class Busy() extends Answer
+  case object Taken extends Answer
+  case object Busy extends Answer
 
 }

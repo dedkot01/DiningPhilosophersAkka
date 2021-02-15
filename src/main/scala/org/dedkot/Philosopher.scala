@@ -14,45 +14,45 @@ class Philosopher(ctx: ActorContext[State],
   ctx.log.info("Hello, I'm {}", name)
 
   private def thinks(): Behavior[State] = Behaviors.receiveMessage {
-    case Thinks() =>
+    case Thinks =>
       simulateAction()
 
-      ctx.self ! Eats()
+      ctx.self ! Eats
       hungry
     case _ => Behaviors.same
   }
 
   private def hungry(): Behavior[State] = Behaviors.receiveMessage {
-    case Eats() =>
+    case Eats =>
       leftFork ! Fork.Take(ctx.messageAdapter(ForkAnswer))
       takeLeftFork
     case _ => Behaviors.same
   }
 
   private def takeLeftFork(): Behavior[State] = Behaviors.receiveMessage {
-    case ForkAnswer(Fork.Taken()) =>
+    case ForkAnswer(Fork.Taken) =>
       rightFork ! Fork.Take(ctx.messageAdapter(ForkAnswer))
       takeRightFork
-    case ForkAnswer(Fork.Busy()) =>
-      ctx.self ! Thinks()
+    case ForkAnswer(Fork.Busy) =>
+      ctx.self ! Thinks
       thinks
     case _ => Behaviors.same
   }
 
   private def takeRightFork(): Behavior[State] = Behaviors.receiveMessage {
-    case ForkAnswer(Fork.Taken()) =>
-      ctx.self ! Eats()
+    case ForkAnswer(Fork.Taken) =>
+      ctx.self ! Eats
       eats
-    case ForkAnswer(Fork.Busy()) =>
+    case ForkAnswer(Fork.Busy) =>
       leftFork ! Fork.Put(ctx.messageAdapter(ForkAnswer))
 
-      ctx.self ! Thinks()
+      ctx.self ! Thinks
       thinks
     case _ => Behaviors.same
   }
 
   private def eats(): Behavior[State] = Behaviors.receiveMessage {
-    case Eats() =>
+    case Eats =>
       ctx.log.info("{} eats use {} and {}", name, leftFork.path.name, rightFork.path.name)
       simulateAction()
 
@@ -60,7 +60,7 @@ class Philosopher(ctx: ActorContext[State],
       rightFork ! Fork.Put(ctx.messageAdapter(ForkAnswer))
 
       ctx.log.info("{} end eats and put {} and {}", name, leftFork.path.name, rightFork.path.name)
-      ctx.self ! Thinks()
+      ctx.self ! Thinks
       thinks
     case _ => Behaviors.same
   }
@@ -75,8 +75,8 @@ class Philosopher(ctx: ActorContext[State],
 object Philosopher {
 
   sealed trait State
-  case class Thinks() extends State
-  case class Eats() extends State
+  case object Thinks extends State
+  case object Eats extends State
   final case class ForkAnswer(msg: Fork.Answer) extends State
 
   def apply(name: String,

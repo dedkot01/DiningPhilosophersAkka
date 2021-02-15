@@ -13,15 +13,15 @@ class ForkSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
   "A Fork" must {
     "reply to taken" in {
       fork ! Take(sender1.ref)
-      sender1.expectMessage(Taken())
+      sender1.expectMessage(Taken)
     }
     "reply to busy" in {
       fork ! Take(sender2.ref)
-      sender2.expectMessage(Busy())
+      sender2.expectMessage(Busy)
     }
     "stay busy" in {
       fork ! Put(sender2.ref)
-      sender2.expectMessage(Busy())
+      sender2.expectMessage(Busy)
     }
   }
 

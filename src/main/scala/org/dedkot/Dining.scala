@@ -14,7 +14,7 @@ object Dining {
       (name, i) <- listPhilosophers.zipWithIndex
     ) yield ctx.spawn(Philosopher(name, forks(i), forks((i + 1) % forks.length)), name)
 
-    philosophers.foreach(_ ! Philosopher.Thinks())
+    philosophers.foreach(_ ! Philosopher.Thinks)
 
     Behaviors.empty
   }
