@@ -3,13 +3,13 @@ package org.dedkot
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, Behavior}
 
-class Fork(private var takenBy: String) {
+class Fork(private var takenBy: Option[String]) {
 
   import Fork._
 
   private def free(): Behavior[Command] = Behaviors.receiveMessage {
     case Take(from) =>
-      takenBy = from.path.name
+      takenBy = Option(from.path.name)
       from ! Taken()
       busy
     case _ => Behaviors.same
@@ -20,8 +20,8 @@ class Fork(private var takenBy: String) {
       from ! Busy()
       Behaviors.same
     case Put(from) =>
-      if (from.path.name.equals(takenBy)) {
-        takenBy = null
+      if (takenBy.getOrElse(false).equals(from.path.name)) {
+        takenBy = None
         free
       }
       else {
@@ -38,7 +38,7 @@ class Fork(private var takenBy: String) {
 object Fork {
 
   def apply(): Behavior[Command] = {
-    new Fork(null).free
+    new Fork(None).free
   }
 
   sealed trait Command
