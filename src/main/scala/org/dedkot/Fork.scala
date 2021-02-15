@@ -42,8 +42,8 @@ object Fork {
   }
 
   sealed trait Command
-  case class Take(who: ActorRef[Answer]) extends Command
-  case class Put(who: ActorRef[Answer]) extends Command
+  case class Take(from: ActorRef[Answer]) extends Command
+  case class Put(from: ActorRef[Answer]) extends Command
 
   sealed trait Answer
   case class Taken() extends Answer
