@@ -23,6 +23,11 @@ class ForkSpec extends ScalaTestWithActorTestKit with AnyWordSpecLike {
       fork ! Put(sender2.ref)
       sender2.expectMessage(Busy)
     }
+    "reply to taken after put" in {
+      fork ! Put(sender1.ref)
+      fork ! Take(sender1.ref)
+      sender1.expectMessage(Taken)
+    }
   }
 
 }
