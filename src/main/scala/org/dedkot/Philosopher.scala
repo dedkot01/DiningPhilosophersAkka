@@ -2,14 +2,14 @@ package org.dedkot
 
 import akka.actor.typed.{ActorRef, Behavior}
 import akka.actor.typed.scaladsl.{ActorContext, Behaviors}
-import org.dedkot.Person.{Eats, ForkAnswer, State, Thinks}
+import org.dedkot.Philosopher.{Eats, ForkAnswer, State, Thinks}
 
 import scala.util.Random
 
-class Person(ctx: ActorContext[State],
-             name: String,
-             leftFork: ActorRef[Fork.Command],
-             rightFork: ActorRef[Fork.Command]) {
+class Philosopher(ctx: ActorContext[State],
+                  name: String,
+                  leftFork: ActorRef[Fork.Command],
+                  rightFork: ActorRef[Fork.Command]) {
 
   ctx.log.info("Hello, I'm {}", name)
 
@@ -72,7 +72,7 @@ class Person(ctx: ActorContext[State],
 
 }
 
-object Person {
+object Philosopher {
 
   sealed trait State
   case class Thinks() extends State
@@ -82,7 +82,7 @@ object Person {
   def apply(name: String,
             leftFork: ActorRef[Fork.Command],
             rightFork: ActorRef[Fork.Command]): Behavior[State] = Behaviors.setup { ctx =>
-    new Person(ctx, name, leftFork, rightFork).thinks
+    new Philosopher(ctx, name, leftFork, rightFork).thinks
   }
 
 }

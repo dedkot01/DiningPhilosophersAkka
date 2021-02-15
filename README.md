@@ -11,12 +11,12 @@
 
 ## Реализация
 
-Главный метод `main` находится в объекте `Table`.
+Главный метод `main` находится в объекте `Dining`.
 
 Список классов и объектов:
-* `Table` - главный актор, порождающий вилки (`Fork`) и философов (`Person`). Каждому философу передаётся левая и правая вилка.
+* `Dining` - главный актор, порождающий вилки (`Fork`) и философов (`Philosopher`). Каждому философу знает, где для него лежит левая и правая вилка.
 * `Fork` - актор, реализующий вилку. Принимает команды `Take` и `Put`, отвечает `Taken` и `Busy`.
-* `Person` - актор, реализующий философа (или, как следует из названия, любого человека). Содержит ссылки на левую и правую вилки относительно него самого. Действия (думать и есть) симулируются через метод `Thread.sleep` на `3-10 секунд` (период каждый раз генерируется). Логика его действий такова, что сначала философ берёт левую вилку. Если она свободна, то собирается взять правую вилку, иначе начинает думать. Если правая вилка оказалась свободной, то он начинает есть, иначе освобождает левую вилку и начинает думать.
+* `Philosopher` - актор, реализующий философа. Содержит ссылки на левую и правую вилки относительно него самого. Действия (думать и есть) симулируются через метод `Thread.sleep` на `3-10 секунд` (период каждый раз генерируется). Логика его действий такова, что сначала философ берёт левую вилку. Если она свободна, то собирается взять правую вилку, иначе начинает думать. Если правая вилка оказалась свободной, то он начинает есть, иначе освобождает левую вилку и начинает думать.
 
 ## Запуск
 
@@ -30,11 +30,11 @@ sbt run
 Пример вывода
 ```
 ...
-[2021-02-15 00:02:14,234] [INFO] [org.dedkot.Person] [akka://Table/user/Kakashi] - Kakashi eats use Fork4 and Fork5
-[2021-02-15 00:02:14,399] [INFO] [org.dedkot.Person] [akka://Table/user/Naruto] - Naruto eats use Fork1 and Fork2
-[2021-02-15 00:02:19,077] [INFO] [org.dedkot.Person] [akka://Table/user/Kakashi] - Kakashi end eats and put Fork4 and Fork5
-[2021-02-15 00:02:20,065] [INFO] [org.dedkot.Person] [akka://Table/user/Sakura] - Sakura eats use Fork3 and Fork4
-[2021-02-15 00:02:21,700] [INFO] [org.dedkot.Person] [akka://Table/user/Naruto] - Naruto end eats and put Fork1 and Fork2
-[2021-02-15 00:02:24,907] [INFO] [org.dedkot.Person] [akka://Table/user/Hinata] - Hinata eats use Fork5 and Fork1
+[2021-02-15 14:23:18,871] [INFO] [org.dedkot.Philosopher] [akka://Table/user/Darwin] - Darwin eats use Fork4 and Fork5
+[2021-02-15 14:23:22,351] [INFO] [org.dedkot.Philosopher] [akka://Table/user/Babbage] - Babbage eats use Fork2 and Fork3
+[2021-02-15 14:23:26,737] [INFO] [org.dedkot.Philosopher] [akka://Table/user/Darwin] - Darwin end eats and put Fork4 and Fork5
+[2021-02-15 14:23:26,883] [INFO] [org.dedkot.Philosopher] [akka://Table/user/Einstein] - Einstein eats use Fork5 and Fork1
+[2021-02-15 14:23:29,214] [INFO] [org.dedkot.Philosopher] [akka://Table/user/Babbage] - Babbage end eats and put Fork2 and Fork3
+[2021-02-15 14:23:34,006] [INFO] [org.dedkot.Philosopher] [akka://Table/user/Cabral] - Cabral eats use Fork3 and Fork4
 ...
 ```

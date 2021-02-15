@@ -3,7 +3,7 @@ package org.dedkot
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.{ActorRef, Behavior}
 
-class Fork(var takenBy: String) {
+class Fork(private var takenBy: String) {
 
   import Fork._
 
@@ -30,6 +30,8 @@ class Fork(var takenBy: String) {
       }
     case _ => Behaviors.same
   }
+
+  def getTakenBy = takenBy
 
 }
 
