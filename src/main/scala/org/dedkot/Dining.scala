@@ -9,10 +9,13 @@ object Dining {
   def apply(): Behavior[NotUsed] = Behaviors.setup { ctx =>
     val listPhilosophers = List("Abbagnano", "Babbage", "Cabral", "Darwin", "Einstein")
 
-    val forks = for (i <- 1 to listPhilosophers.length) yield ctx.spawn(Fork(), "Fork" + i)
-    val philosophers = for (
-      (name, i) <- listPhilosophers.zipWithIndex
-    ) yield ctx.spawn(Philosopher(name, forks(i), forks((i + 1) % forks.length)), name)
+    val forks = listPhilosophers.zipWithIndex.map{ case (_, i) =>
+      ctx.spawn(Fork(), "Fork" + (i + 1))
+    }
+
+    val philosophers = listPhilosophers.zipWithIndex.map { case (name, i) =>
+      ctx.spawn(Philosopher(name, forks(i), forks((i + 1) % forks.length)), name)
+    }
 
     philosophers.foreach(_ ! Philosopher.Thinks)
 
