@@ -59,7 +59,7 @@ class Philosopher(ctx: ActorContext[Command],
       leftFork ! Fork.Put(ctx.messageAdapter(ForkAnswer))
       rightFork ! Fork.Put(ctx.messageAdapter(ForkAnswer))
 
-      ctx.log.info("{} ending eating and puting {} and {}", name, leftFork.path.name, rightFork.path.name)
+      ctx.log.info("{} is ending eating and puting {} and {}", name, leftFork.path.name, rightFork.path.name)
       ctx.self ! Thinks
       thinks
     case _ => Behaviors.same
