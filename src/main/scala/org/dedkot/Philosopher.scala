@@ -53,13 +53,13 @@ class Philosopher(ctx: ActorContext[Command],
 
   private def eats(): Behavior[Command] = Behaviors.receiveMessage {
     case Eats =>
-      ctx.log.info("{} eats use {} and {}", name, leftFork.path.name, rightFork.path.name)
+      ctx.log.info("{} is eating using {} and {}", name, leftFork.path.name, rightFork.path.name)
       simulateAction()
 
       leftFork ! Fork.Put(ctx.messageAdapter(ForkAnswer))
       rightFork ! Fork.Put(ctx.messageAdapter(ForkAnswer))
 
-      ctx.log.info("{} end eats and put {} and {}", name, leftFork.path.name, rightFork.path.name)
+      ctx.log.info("{} ending eating and puting {} and {}", name, leftFork.path.name, rightFork.path.name)
       ctx.self ! Thinks
       thinks
     case _ => Behaviors.same
